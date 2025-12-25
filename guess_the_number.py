@@ -1,38 +1,52 @@
 import random
 
-# Generate a random number between 1 and 100
-random_number = random.randint(1, 100)
+# Control variable for replaying the game
+play_again = 1
 
-# Count how many attempts the user makes
-attempts = 0
+# Outer loop: handles replaying the game
+while play_again == 1:
 
-# Main game loop
-while True:
-    try:
-        # Ask the user for a guess
-        number_guess_by_user = int(input("Enter a number (1–100): "))
+    # Game setup
+    random_number = random.randint(1, 100)
+    attempts = 0
+    max_attempts = 7
 
-        # Check if the number is within the valid range
-        if 1 <= number_guess_by_user <= 100:
-            print(f"Valid input: {number_guess_by_user}")
+    # Inner loop: guessing phase
+    while max_attempts > 0:
+        try:
+            # Get user input
+            guess = int(
+                input(f"Enter a number (1–100) — {max_attempts} attempts remaining: ")
+            )
+
+            # Validate range
+            if not 1 <= guess <= 100:
+                print("Number must be between 1 and 100!")
+                continue
+
+        except ValueError:
+            print("Invalid input! Please enter a valid integer.")
+            continue
+
+        # Valid guess consumes an attempt
+        attempts += 1
+        max_attempts -= 1
+
+        # Compare guess with the target number
+        if guess < random_number:
+            print("Too low!")
+        elif guess > random_number:
+            print("Too high!")
         else:
-            print("Number must be between 1 and 100!")
-            continue  # Skip the rest and ask again
+            print(f"Correct! You guessed it in {attempts} attempts!")
+            answer = input("Want to try again?: ")
+            if answer != "yes":
+                play_again = 0
+            break
 
-    except ValueError:
-        # Runs if the input is not an integer
-        print("Invalid input! Please enter a valid integer.")
-        continue
-
-    # Count this attempt
-    attempts += 1
-
-    # Compare the guess to the random number
-    if number_guess_by_user < random_number:
-        print("Too low! Try again...")
-    elif number_guess_by_user > random_number:
-        print("Too high! Try again...")
-    else:
-        # Correct guess
-        print(f"Correct! You guessed it in {attempts} attempts!")
-        break
+        # Check for loss condition
+        if max_attempts == 0:
+            print("You lost!")
+            answer = input("Want to try again?: ")
+            if answer != "yes":
+                play_again = 0
