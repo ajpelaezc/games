@@ -18,9 +18,9 @@ def rule_confirmation(total, owner="Player"):
 
 def computer_decision(computer_total, player_total):
     # Simple but sensible AI
-    if computer_total >= 20:
+    if computer_total >= 18:
         return "hold"
-    if player_total > 21:
+    elif player_total > 21:
         return "hold"
     return "roll"
 
